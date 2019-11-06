@@ -21,7 +21,7 @@ Objective
 - RAM 16GB
 
 ### Python Modules
-- Tensorflow-gpu 1.15.0rc3
+- Tensorflow-gpu 1.15.0rc3 ( Please Don't Use tf version >= 2.0)
 - OpenCV 4.1.0
 - Matplotlib 3.1.1
 - Numpy 1.16.5
@@ -41,3 +41,4 @@ Objective
 ## Notice
 - If you want to run this demo file, then you must install tf-pose-estimation's guide. Moreover, You must replace 'estimator.py' in 'tf_pose' repository.
 - If you have a Question, Please feel free to ask a question. My address is ljhk1235@gmail.com
+- Windows Sysytem may confuse the above progrmas with programs having other versions. So you must check all of versions.
