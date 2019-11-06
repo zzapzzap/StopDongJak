@@ -39,6 +39,6 @@ Objective
 - Openpose(by. CMU-Perceptual-Computing-Lab) : https://github.com/CMU-Perceptual-Computing-Lab/openpose
 
 ## Notice
-- If you want to run this demo file, then you must install tf-pose-estimation's guide. Moreover, You must replace 'estimator.py' in 'tf_pose' repository.
+- If you want to run this demo file, then you must install tf-pose-estimation's guide. Moreover, You must replace 'estimator.py' in 'tf_pose' repository. Last, Paste 'Demo.py' file into 'tf-pose-estimation' repository.
 - If you have a Question, Please feel free to ask a question. My address is ljhk1235@gmail.com
 - Windows Sysytem may confuse the above progrmas with programs having other versions. So you must check all of versions.
