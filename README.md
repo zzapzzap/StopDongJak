@@ -37,3 +37,7 @@ Objective
 ### OpenSource
 - tf-pose-estimation(by. ildoonet) : https://github.com/ildoonet/tf-pose-estimation
 - Openpose(by. CMU-Perceptual-Computing-Lab) : https://github.com/CMU-Perceptual-Computing-Lab/openpose
+
+## Notice
+- If you want to run this demo file, then you must install tf-pose-estimation's guide. Moreover, You must replace 'estimator.py' in 'tf_pose' repository.
+- If you have a Question, Please feel free to ask a question. My address is ljhk1235@gmail.com
