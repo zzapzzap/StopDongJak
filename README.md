@@ -14,26 +14,26 @@ Objective
 * Construct the level of Alarming.
 
 ## Pre-install
-* System
+### System
 - Windows 10 + Ubuntu 18.04 ( In Windows)
 - NVIDIA GTX 1060 (6GB)
 - Intel 8th Generation Core I7
 - RAM 16GB
 
-* Python Modules
+### Python Modules
 - Tensorflow-gpu 1.15.0rc3
 - OpenCV 4.1.0
 - Matplotlib 3.1.1
 - Numpy 1.16.5
 - etc.
 
-* Program
+### Program
 - CUDA 10.1
 - CuDNN 7.6
 - Python 3.7.3
 - Anaconda 3
 - Microsoft Visual Studio 2015 (ver 14)
 
-* OpenSource
+### OpenSource
 - tf-pose-estimation(by. ildoonet) : https://github.com/ildoonet/tf-pose-estimation
 - Openpose(by. CMU-Perceptual-Computing-Lab) : https://github.com/CMU-Perceptual-Computing-Lab/openpose
