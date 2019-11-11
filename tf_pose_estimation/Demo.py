@@ -56,8 +56,8 @@ def extend_Box(Box_start, Box_end):
 
             dist_x = (x2 - x1); dist_y = (y2 - y1)
 
-            Box_start_extended.append((int(x1 - dist_x * 0.3), int(y1 - dist_y * 0.3)))
-            Box_end_extended.append((int(x2 + dist_x * 0.3), int(y2 + dist_y * 0.3)))
+            Box_start_extended.append((int(x1 - dist_x * 0.5), int(y1 - dist_y * 0.5)))
+            Box_end_extended.append((int(x2 + dist_x * 0.5), int(y2 + dist_y * 0.5)))
 
     return Box_start_extended, Box_end_extended
 
@@ -95,15 +95,15 @@ def Notice_or_not(rwrists, lwrists, shoulders, Box_start_extended, Box_end_exten
                     if (Box_start_extended[i][0] - lwrist[0]) * (lwrist[0] - Box_end_extended[i][0]) > 0 and \
                             (Box_start_extended[i][1] - lwrist[1]) * (lwrist[1] - Box_end_extended[i][1]) > 0:
                         Notice_Box_list.append(i)
-
-        if len(shoulders) != 0:
-            for index in range(0, len(shoulders), 2):
-                for i in range(len(Box_end_extended)):
-                    if shoulders[index][0] < shoulders[index + 1][0]:
-                        if (Box_start_extended[i][0] < (shoulders[index][0] + shoulders[index + 1][0])/2 < Box_end_extended[i][0])
-                            and (Box_start_extended[i][1] < (shoulders[index][1] + shoulders[index + 1][1])/2 < Box_end_extended[i][1]):
-                            print("등돌렸음 between", shoulders[index], "and", shoulders[index + 1], "at", datetime.now())
-                            ### 부가적으로 1단계 알람 Caputure
+        #
+        # if len(shoulders) != 0:
+        #     for index in range(0, len(shoulders), 2):
+        #         for i in range(len(Box_end_extended)):
+        #             if shoulders[index][0] < shoulders[index + 1][0]:
+        #                 if (Box_start_extended[i][0] < (shoulders[index][0] + shoulders[index + 1][0])/2 < Box_end_extended[i][0])\
+        #                     and (Box_start_extended[i][1] < (shoulders[index][1] + shoulders[index + 1][1])/2 < Box_end_extended[i][1]):
+        #                     print("등돌렸음 between", shoulders[index], "and", shoulders[index + 1], "at", datetime.now())
+        #                     ### 부가적으로 1단계 알람 Caputure
 
     Notice_Box_list = set(Notice_Box_list)
     return Notice_Box_list
@@ -113,16 +113,16 @@ cam = cv2.VideoCapture(0)
 fps_time = 0
 w, h = model_wh('0x0') ## resize == '0x0' (default)
 graph_path_list = ['cmu', 'mobilenet_thin', 'mobilenet_v2_small', 'mobilenet_v2_large']
-e = TfPoseEstimator(get_graph_path(graph_path_list[2]), target_size=(432, 368), trt_bool=False)
+e = TfPoseEstimator(get_graph_path(graph_path_list[3]), target_size=(432, 368), trt_bool=False)
 
 while True:
     ret_val, image = cam.read()
     rows, cols = image.shape[:2]
 
-    # ### 180도 변환, 화면 회전 변환 조정
-    # mat = cv2.getRotationMatrix2D((cols/2, rows/2), 180, 1)
+    ### 180도 변환, 화면 회전 변환 조정
+    mat = cv2.getRotationMatrix2D((cols/2, rows/2), 180, 1)
     # mat = cv2.getRotationMatrix2D((cols/2, rows/2), , 1)
-    # image = cv2.warpAffine(image, mat, (cols, rows))
+    image = cv2.warpAffine(image, mat, (cols, rows))
 
     ### 사람 만들기 : 위에서 네트워크를 불러와서 사람들의 중요 신체 부위에 포인트를 찍는다.
     humans = e.inference(image, resize_to_default=(w > 0 and h > 0), upsample_size=4.0)
@@ -158,12 +158,12 @@ while True:
         cv2.rectangle(image, Box_start[-1], Box_ing, (0, 255, 0), 5)
     if len(Box_start) != 0 and len(Box_end_extended) != 0:
         for i in range(len(Box_start) - 1):
-            cv2.rectangle(image, Box_start[i], Box_end[i], (0, 0, 255), 5)
-            cv2.rectangle(image, Box_start_extended[i], Box_end_extended[i], (0, 0, 255), 1)
+            cv2.rectangle(image, Box_start[i], Box_end[i], (255, 0, 0), 5)
+            cv2.rectangle(image, Box_start_extended[i], Box_end_extended[i], (255, 0, 0), 3)
 
         if len(Box_end_extended) == len(Box_start):
-            cv2.rectangle(image, Box_start[-1], Box_end[-1], (0, 0, 255), 5)
-            cv2.rectangle(image, Box_start_extended[-1], Box_end_extended[-1], (0, 0, 255), 1)
+            cv2.rectangle(image, Box_start[-1], Box_end[-1], (255, 0, 0), 5)
+            cv2.rectangle(image, Box_start_extended[-1], Box_end_extended[-1], (255, 0, 0), 3)
 
     ### Alarming 0 : ㄱㅊ, 1 : 주의, 2 : 경고
     alarm = 0
@@ -175,14 +175,14 @@ while True:
         for Warning_at in Warning_Box_list:
             print("2단계 Detected!!! at ", Warning_at + 1, " box : ", "왼쪽 : ", humans_LWrist_List, "오른쪽 : ",
                   humans_RWrist_List, 'at : ', datetime.now())
-            cv2.rectangle(image, Box_start[Warning_at], Box_end[Warning_at], (255, 0, 0), 5)
+            cv2.rectangle(image, Box_start[Warning_at], Box_end[Warning_at], (0, 0, 255), 5)
             alarm = 2
 
-    if len(Noticed_Box_list) > 0 and alarm != 2: # 1단계 경고 신호
+    if len(Noticed_Box_list) > 0: # 1단계 경고 신호
         for Noticed_at in Noticed_Box_list:
             print("1단계 Detected!!! at ", Noticed_at + 1, " box : ", "왼쪽 : ", humans_LWrist_List, "오른쪽 : ",
                   humans_RWrist_List, 'at : ', datetime.now())
-        cv2.rectangle(image, Box_start_extended[Noticed_at], Box_end_extended[Noticed_at], (255, 0, 0), 1)
+            cv2.rectangle(image, Box_start_extended[Noticed_at], Box_end_extended[Noticed_at], (0, 0, 255), 3)
 
     ### UI 띄우기
     cv2.putText(image,
